@@ -1,4 +1,4 @@
-flatsweepVersion = "v2025.10.7"
+flatsweepVersion = "v2026.5.21"
 
 import sys
 import gi
@@ -14,7 +14,7 @@ from functools import partial
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 
-from gi.repository import Gtk, Adw, GLib
+from gi.repository import Gtk, Adw, GLib, Gio
 
 try:
     locale.setlocale(locale.LC_ALL, os.getenv("LANG"))
@@ -270,7 +270,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.boxLabelMB.set_spacing(-60)
         self.labelMB = Gtk.Label()
         self.labelMB.set_margin_top(-30)
-        self.labelMB.set_margin_bottom(40)
+        self.labelMB.set_margin_bottom(10)
         self.labelMB1 = Gtk.Label()
         self.labelMB1.set_hexpand(True)
         self.labelMB1.set_markup("<span size=\"40000\" weight=\"bold\">MB</span>")
@@ -326,7 +326,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.connect("realize", self.init_initiate)
 
     def init_initiate(self, app):
-        if not (os.path.exists(os.getenv("XDG_DATA_HOME") + "/firstLaunchWarningDone")):
+        if not (os.path.exists(os.path.join(GLib.get_user_data_dir(), "firstLaunchWarningDone"))):
             self.scroll.set_child(self.boxFirstLaunch)
         else:
             self.scroll.set_child(self.boxLoading)
@@ -337,8 +337,8 @@ class MainWindow(Adw.ApplicationWindow):
         flatpakListAll = []
         if (os.path.exists("/var/lib/flatpak/app")):
             flatpakListAll += listdir("/var/lib/flatpak/app")
-        if (os.path.exists(".local/share/flatpak/app")):
-            flatpakListAll += listdir(".local/share/flatpak/app")
+        if (os.path.exists(os.path.join(GLib.get_home_dir(), ".local", "share", "flatpak", "app"))):
+            flatpakListAll += listdir(os.path.join(GLib.get_home_dir(), ".local", "share", "flatpak", "app"))
         flatpakList = set(flatpakListAll)
 
         if ("io.github.giantpinkrobots.flatsweep" not in flatpakList):
@@ -346,8 +346,8 @@ class MainWindow(Adw.ApplicationWindow):
 
         else:
             varApp = []
-            if (os.path.exists(os.path.join(GLib.get_home_dir(), ".var/app"))):
-                varApp = [folder.name for folder in os.scandir(os.path.join(GLib.get_home_dir(), ".var/app")) if not folder.is_symlink()]
+            if (os.path.exists(os.path.join(GLib.get_home_dir(), ".var", "app"))):
+                varApp = [folder.name for folder in os.scandir(os.path.join(GLib.get_home_dir(), ".var", "app")) if not folder.is_symlink()]
 
             self.leftoverData = []
             self.leftoverDataFileSizes = []
@@ -445,10 +445,10 @@ class MainWindow(Adw.ApplicationWindow):
                 self.toBeCleanedCheckboxAll.set_active(True)
 
     def openFolder(self, row, app, index):
-        os.system("xdg-open " + os.path.join(GLib.get_home_dir(), ".var", "app", self.leftoverData[index]))
+        Gio.AppInfo.launch_default_for_uri("file://" + os.path.join(GLib.get_home_dir(), ".var", "app", self.leftoverData[index]), None)
 
     def firstLaunchDone(self, app):
-        open((os.getenv("XDG_DATA_HOME") + "/firstLaunchWarningDone"), 'a').close()
+        open((os.path.join(GLib.get_user_data_dir(), "firstLaunchWarningDone")), 'a').close()
         self.scroll.set_child(self.boxLoading)
         th = threading.Thread(target=self.initiate, args=(app, {}))
         th.start()

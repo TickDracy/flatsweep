@@ -50,10 +50,10 @@ Caution: Flatsweep exclusively looks at the default Flatpak install directory. I
 </supports>
 
 <releases>
-<release version="v2025.10.7" date="2025-10-07">
+<release version="v2026.5.21" date="2026-05-21">
 <description>
-<p>- Japanese language support.</p>
-<p>- Update to GNOME runtime version 49.</p>
+<p>- Bug fixes relating to home directory detection.</p>
+<p>- Update to GNOME runtime version 50.</p>
 </description>
 </release>
 </releases>

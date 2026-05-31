@@ -1,10 +1,10 @@
 {
-    "id" : "io.github.giantpinkrobots.flatsweep",
-    "runtime" : "org.gnome.Platform",
-    "runtime-version" : "49",
-    "sdk" : "org.gnome.Sdk",
-    "command" : "flatsweep",
-    "finish-args" : [
+    "id": "io.github.giantpinkrobots.flatsweep",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "50",
+    "sdk": "org.gnome.Sdk",
+    "command": "flatsweep",
+    "finish-args": [
         "--share=ipc",
         "--socket=fallback-x11",
         "--device=dri",
@@ -13,7 +13,7 @@
         "--filesystem=/var/lib/flatpak/app:ro",
         "--filesystem=home/.local/share/flatpak/app:ro"
     ],
-    "cleanup" : [
+    "cleanup": [
         "/include",
         "/lib/pkgconfig",
         "/man",
@@ -24,20 +24,20 @@
         "*.la",
         "*.a"
     ],
-    "modules" : [
+    "modules": [
         {
-            "name" : "flatsweep",
-            "builddir" : true,
-            "buildsystem" : "meson",
-            "sources" : [
+            "name": "flatsweep",
+            "builddir": true,
+            "buildsystem": "meson",
+            "sources": [
                 {
-                    "type" : "git",
-                    "url" : "file:///./"
+                    "type": "git",
+                    "url": "file:///./"
                 }
             ]
         }
     ],
-    "build-options" : {
-        "env" : {        }
+    "build-options": {
+        "env": {}
     }
 }
